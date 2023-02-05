@@ -23,11 +23,11 @@ const singleFileUploader = async (data, user_id) => {
     const newFile = new File({
       title: data.originalname,
       user_id,
-      key: data.filename,
+      key: locationKey,
       fileType: data.mimetype,
       location: 'https://storage.googleapis.com/dropbox-sumon/' + locationKey,
     });
-    deleteFromLocal(data.filename)
+    deleteFromLocal(data.filename);
     return await newFile.save();
   } catch (err) {
     throw new ApiError(0, err.message);
@@ -54,7 +54,7 @@ const deleteFilesByKey = async (keys, user_id) => {
     const file = await File.find({ key: { $in: keys }, user_id });
     const files = await File.deleteMany({ key: { $in: keys }, user_id }).exec();
     for (let i = 0; i < file.length; i++) {
-      await deleteFromLocal(file[i].key);
+      await bucket.file(file[i].key).delete();
     }
     return files;
   } catch (err) {
