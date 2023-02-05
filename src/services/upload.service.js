@@ -1,16 +1,33 @@
 const fs = require('fs');
 const ApiError = require('../utils/ApiError');
 const { File } = require('../models');
+const { Storage } = require('@google-cloud/storage');
 
+const gcs = new Storage({
+  projectId: 'dropbox-sumon',
+  keyFilename: 'google-cloud-key.json',
+});
+const bucket = gcs.bucket(process.env.GCLOUD_STORAGE_BUCKET);
+const googleFileUploader = async (path) => {
+  try {
+    const d = await bucket.upload(path);
+    return d[0].id;
+    // Create a new blob in the bucket and upload the file data.
+  } catch (err) {
+    throw new ApiError(0, err.message);
+  }
+};
 const singleFileUploader = async (data, user_id) => {
   try {
+    const locationKey = await googleFileUploader(data.path);
     const newFile = new File({
       title: data.originalname,
       user_id,
       key: data.filename,
       fileType: data.mimetype,
-      location: data.path,
+      location: 'https://storage.googleapis.com/dropbox-sumon/' + locationKey,
     });
+    deleteFromLocal(data.filename)
     return await newFile.save();
   } catch (err) {
     throw new ApiError(0, err.message);
@@ -18,7 +35,6 @@ const singleFileUploader = async (data, user_id) => {
 };
 const getFileByKey = async (key) => {
   try {
-    console.log(key);
     let file = await File.findOne({ key });
     if (!file) throw new ApiError(0, 'Nothing Found');
     return file;
@@ -54,7 +70,6 @@ const updateFileByKey = async (key, data, user_id) => {
 };
 
 const deleteFromLocal = async (key) => {
-  console.log(key);
   fs.unlink(`uploads/${key}`, (err) => {
     if (err) {
       throw new ApiError(4003, "File Isn't Deleted");

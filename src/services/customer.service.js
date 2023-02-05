@@ -57,7 +57,6 @@ const logout = async (refreshToken) => {
     }
     return await AuthToken.deleteMany({ refresh_token: refreshToken });
   } catch (err) {
-    console.log(err);
     throw new ApiError(1051, 'Logout Error');
   }
 };
@@ -67,7 +66,6 @@ const refreshAuth = async (refreshToken) => {
     const user = await User.findOne({
       _id: refreshTokenDoc.user_id,
     });
-    console.log(user);
     if (!user) {
       throw new ApiError(1050, 'Please authenticate. Token Error');
     }

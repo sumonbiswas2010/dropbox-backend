@@ -33,7 +33,6 @@ const saveToken = async (access_token, refresh_token, user_id, expire) => {
 const verifyToken = async (token) => {
   const payload = jwt.verify(token, config.jwt.secret);
   const tokenDoc = await AuthToken.findOne({ refresh_token: token, user_id: payload.sub });
-
   if (!tokenDoc) {
     throw new ApiError(1001, 'Token does not exist');
   }
