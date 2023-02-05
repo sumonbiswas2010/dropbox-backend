@@ -1,0 +1,13 @@
+# Dependencies
+node_modules
+# yarn error logs
+yarn-error.log
+yarn.lock
+package-lock.json
+.env.production
+# Environment varibales
+!.env*.example
+.DS_Store
+# Code coverage
+coverage
+.cache
