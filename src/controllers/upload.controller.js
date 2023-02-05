@@ -8,23 +8,31 @@ const revoUploadService = require('../services/upload.service');
 const { success } = require('../utils/ApiResponse');
 
 const singleFileUploader = catchAsync(async (req, res) => {
-  const upload = await revoUploadService.singleFileUploader(req.file);
+  const upload = await revoUploadService.singleFileUploader(req.file, req.userData.sub);
   res.status(httpStatus.CREATED).send(success(upload, 'File Uploaded Successfully'));
 });
-
+const getAllFileInfo = catchAsync(async (req, res) => {
+  const files = await revoUploadService.getAllFileInfo(req.userData.sub);
+  res.status(httpStatus.CREATED).send(success(files, 'Files Found Successfully'));
+});
+const deleteFilesByKey = catchAsync(async (req, res) => {
+  const files = await revoUploadService.deleteFilesByKey(req.body, req.userData.sub);
+  res.status(httpStatus.OK).send(success(files, 'Files Deleted Successfully'));
+});
+const updateFileByKey = catchAsync(async (req, res) => {
+  const files = await revoUploadService.updateFileByKey(req.params.key, req.body, req.userData.sub);
+  res.status(httpStatus.OK).send(success(files, 'File Updated Successfully'));
+});
 const getFileByKey = catchAsync(async (req, res) => {
   const file = await revoUploadService.getFileByKey(req.params.key);
   const readStream = fs.createReadStream(file.location);
-  console.log(readStream);
   readStream.pipe(res);
-  // res.writeHead(200, { 'Content-Type': 'application/pdf' });
-  // res.write(readStream, 'binary');
-  // res.end(null, 'binary');
-  // file.pipe(res)
-  // res.status(httpStatus.CREATED).send(success(file, 'Image Downloaded Successfully'));
 });
 
 module.exports = {
   singleFileUploader,
   getFileByKey,
+  getAllFileInfo,
+  deleteFilesByKey,
+  updateFileByKey,
 };

@@ -11,7 +11,6 @@ const { authLimiter } = require('./middlewares/rateLimiter');
 const routes = require('./routes/v1');
 const { errorConverter, errorHandler } = require('./middlewares/errorHandler');
 const ApiError = require('./utils/ApiError');
-const models = require('./models')
 
 const app = express();
 if (config.env !== 'test') {
@@ -43,10 +42,10 @@ if (config.env === 'production') {
 
 app.get('/', async (req, res) => {
   const serverStatus = {
-    name: 'Courses',
+    name: 'DropBox',
     status: 'UP',
-    version: '1.1.0',
-    date: '2 February, 2023',
+    version: '1.0.0',
+    date: '05 February, 2023',
   };
   res.status(200).json(serverStatus);
 });

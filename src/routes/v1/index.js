@@ -1,5 +1,5 @@
 const express = require('express');
-const courseRoute = require('./course.route');
+const customerRoute = require('./customer.route');
 const uploadRoute = require('./upload.route');
 const config = require('../../config/config');
 
@@ -9,7 +9,7 @@ const router = express.Router();
 const defaultRoutes = [
   {
     path: '/',
-    route: courseRoute,
+    route: customerRoute,
   },
   {
     path: '/upload',
