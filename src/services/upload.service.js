@@ -2,10 +2,19 @@ const fs = require('fs');
 const ApiError = require('../utils/ApiError');
 const { File } = require('../models');
 const { Storage } = require('@google-cloud/storage');
-
+console.log({
+  credentials: {
+    client_email: process.env.gcsKeyClientEmail,
+    private_key: process.env.gcsKeyPrivateKey,
+  },
+  projectId: process.env.GCLOUD_STORAGE_BUCKET,
+});
 const gcs = new Storage({
-  projectId: 'dropbox-sumon',
-  keyFilename: './google-cloud-key.json',
+  credentials: {
+    client_email: process.env.gcsKeyClientEmail,
+    private_key: process.env.gcsKeyPrivateKey,
+  },
+  projectId: process.env.GCLOUD_STORAGE_BUCKET,
 });
 const bucket = gcs.bucket(process.env.GCLOUD_STORAGE_BUCKET);
 const googleFileUploader = async (path) => {
