@@ -5,7 +5,7 @@ const { Storage } = require('@google-cloud/storage');
 
 const gcs = new Storage({
   projectId: 'dropbox-sumon',
-  keyFilename: '/google-cloud-key.json',
+  keyFilename: './google-cloud-key.json',
 });
 const bucket = gcs.bucket(process.env.GCLOUD_STORAGE_BUCKET);
 const googleFileUploader = async (path) => {
