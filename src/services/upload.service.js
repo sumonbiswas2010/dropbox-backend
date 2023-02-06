@@ -70,7 +70,7 @@ const updateFileByKey = async (key, data, user_id) => {
 };
 
 const deleteFromLocal = async (key) => {
-  fs.unlink(`tmp/${key}`, (err) => {
+  fs.unlink(`/tmp/${key}`, (err) => {
     if (err) {
       throw new ApiError(4003, "File Isn't Deleted");
     } else return true;
