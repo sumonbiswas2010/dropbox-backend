@@ -6,7 +6,7 @@ const ApiError = require('../utils/ApiError');
 
 const storage = multer.diskStorage({
   destination(req, file, cb) {
-    cb(null, 'uploads/');
+    cb(null, 'tmp/');
   },
 });
 

@@ -4,27 +4,27 @@ const httpStatus = require('http-status');
 const catchAsync = require('../utils/catchAsync');
 const fs = require('fs');
 const path = require('path');
-const revoUploadService = require('../services/upload.service');
+const uploadService = require('../services/upload.service');
 const { success } = require('../utils/ApiResponse');
 
 const singleFileUploader = catchAsync(async (req, res) => {
-  const upload = await revoUploadService.singleFileUploader(req.file, req.userData.sub);
+  const upload = await uploadService.singleFileUploader(req.file, req.userData.sub);
   res.status(httpStatus.CREATED).send(success(upload, 'File Uploaded Successfully'));
 });
 const getAllFileInfo = catchAsync(async (req, res) => {
-  const files = await revoUploadService.getAllFileInfo(req.userData.sub);
+  const files = await uploadService.getAllFileInfo(req.userData.sub);
   res.status(httpStatus.CREATED).send(success(files, 'Files Found Successfully'));
 });
 const deleteFilesByKey = catchAsync(async (req, res) => {
-  const files = await revoUploadService.deleteFilesByKey(req.body, req.userData.sub);
+  const files = await uploadService.deleteFilesByKey(req.body, req.userData.sub);
   res.status(httpStatus.OK).send(success(files, 'Files Deleted Successfully'));
 });
 const updateFileByKey = catchAsync(async (req, res) => {
-  const files = await revoUploadService.updateFileByKey(req.params.key, req.body, req.userData.sub);
+  const files = await uploadService.updateFileByKey(req.params.key, req.body, req.userData.sub);
   res.status(httpStatus.OK).send(success(files, 'File Updated Successfully'));
 });
 const getFileByKey = catchAsync(async (req, res) => {
-  const file = await revoUploadService.getFileByKey(req.params.key);
+  const file = await uploadService.getFileByKey(req.params.key);
   const readStream = fs.createReadStream(file.location);
   readStream.pipe(res);
 });
