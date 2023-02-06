@@ -51,7 +51,7 @@ const getFileByKey = async (key) => {
 };
 const getAllFileInfo = async (user_id) => {
   try {
-    return await File.find({ user_id }, { location: 0, user: 0 }).exec();
+    return await File.find({ user_id }, { user: 0 }).exec();
   } catch (err) {
     throw new ApiError(0, err.message);
   }
