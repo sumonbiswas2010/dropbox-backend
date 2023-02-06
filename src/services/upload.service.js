@@ -2,20 +2,18 @@ const fs = require('fs');
 const ApiError = require('../utils/ApiError');
 const { File } = require('../models');
 const { Storage } = require('@google-cloud/storage');
-console.log({
-  credentials: {
-    client_email: process.env.gcsKeyClientEmail,
-    private_key: process.env.gcsKeyPrivateKey,
-  },
-  projectId: process.env.GCLOUD_STORAGE_BUCKET,
-});
+const gcsKey = JSON.parse(
+  Buffer.from(process.env.GCP_CRED, 'base64').toString()
+);
+
 const gcs = new Storage({
   credentials: {
-    client_email: process.env.gcsKeyClientEmail,
-    private_key: process.env.gcsKeyPrivateKey,
+    client_email: gcsKey.client_email,
+    private_key: gcsKey.private_key
   },
-  projectId: process.env.GCLOUD_STORAGE_BUCKET,
+  projectId: gcsKey.project_id
 });
+
 const bucket = gcs.bucket(process.env.GCLOUD_STORAGE_BUCKET);
 const googleFileUploader = async (path) => {
   try {
